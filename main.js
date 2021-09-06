@@ -205,6 +205,15 @@ class Polestar extends utils.Adapter {
                         });
                     });
                     this.json2iob.parse(vehicle.vin + ".general", vehicle);
+                    const data = {
+                        operationName: "GetVDMSCarDetails",
+                        query: "query GetVDMSCarDetails($vin: String!, $locale: String!) {\n  vdms {\n    __typename\n    vehicleInformation(vin: $vin, locale: $locale) {\n      __typename\n      ...VdmsExtendedCarDetails\n    }\n  }\n}\nfragment VdmsExtendedCarDetails on VehicleInformation {\n  __typename\n  belongsToFleet\n  content {\n    __typename\n    dimensions {\n      __typename\n      ...VdmsDimensionsDetails\n    }\n    exterior {\n      __typename\n      ...VdmsFeatureDetails\n    }\n    images {\n      __typename\n      ...VdmsCarImageDetails\n    }\n    interior {\n      __typename\n      ...VdmsFeatureDetails\n    }\n    model {\n      __typename\n      ...VdmsModelDetails\n    }\n    motor {\n      __typename\n      ...VdmsFeatureDetails\n    }\n    performancePackage {\n      __typename\n      ...VdmsFeatureDetails\n    }\n    pilotPackage {\n      __typename\n      ...VdmsFeatureDetails\n    }\n    plusPackage {\n      __typename\n      ...VdmsFeatureDetails\n    }\n    specification {\n      __typename\n      ...VdmsSpecificationDetails\n    }\n    towbar {\n      __typename\n      ...VdmsFeatureDetails\n    }\n    wheels {\n      __typename\n      ...VdmsFeatureDetails\n    }\n  }\n  curbWeight {\n    __typename\n    ...VdmsWeightDetails\n  }\n  cylinderVolume\n  cylinderVolumeUnit\n  drivetrain\n  factoryCompleteDate\n  fuelType\n  hasPerformancePackage\n  market\n  maxTrailerWeight {\n    __typename\n    ...VdmsWeightDetails\n  }\n  metaOrderNumber\n  modelYear\n  motor {\n    __typename\n    ...VdmsMotorDetails\n  }\n  numberOfCylinders\n  numberOfDoors\n  numberOfGears\n  numberOfSeats\n  pno34\n  primaryDriver\n  registrationNo\n  serviceHistory {\n    __typename\n    ...VdmsWorkOrderDetails\n  }\n  transmission\n  vin\n  wltpNedcData {\n    __typename\n    ...VdmsWltpDetails\n  }\n}\nfragment VdmsDimensionsDetails on VdmsDimensions {\n  __typename\n  bodyDimensions {\n    __typename\n    ...VdmsLabelValueDetails\n  }\n  groundClearanceWithPerformance {\n    __typename\n    ...VdmsLabelValueDetails\n  }\n  groundClearanceWithoutPerformance {\n    __typename\n    ...VdmsLabelValueDetails\n  }\n  wheelbase {\n    __typename\n    ...VdmsLabelValueDetails\n  }\n}\nfragment VdmsLabelValueDetails on VdmsLabelValue {\n  __typename\n  label\n  value\n}\nfragment VdmsFeatureDetails on VdmsFeature {\n  __typename\n  code\n  description\n  excluded\n  galleryImage {\n    __typename\n    alt\n    url\n  }\n  name\n  thumbnail {\n    __typename\n    alt\n    url\n  }\n}\nfragment VdmsCarImageDetails on VdmsCarImages {\n  __typename\n  interior {\n    __typename\n    ...VdmsImageDetails\n  }\n  location {\n    __typename\n    ...VdmsImageDetails\n  }\n  studio {\n    __typename\n    ...VdmsImageDetails\n  }\n}\nfragment VdmsImageDetails on VdmsImage {\n  __typename\n  angles\n  resolutions\n  url\n}\nfragment VdmsModelDetails on VdmsModel {\n  __typename\n  code\n  name\n}\nfragment VdmsSpecificationDetails on VdmsSpecification {\n  __typename\n  battery\n  electricMotors\n  performance\n  torque\n  totalHp\n  totalKw\n  trunkCapacity {\n    __typename\n    ...VdmsLabelValueDetails\n  }\n}\nfragment VdmsWeightDetails on VdmsWeight {\n  __typename\n  unit\n  value\n}\nfragment VdmsMotorDetails on VdmsMotor {\n  __typename\n  code\n  description\n}\nfragment VdmsWorkOrderDetails on VdmsWorkOrder {\n  __typename\n  market\n  operations {\n    __typename\n    ...VdmsOperationDetails\n  }\n  orderEndDate\n  orderNumber\n  orderStartDate\n  parts {\n    __typename\n    ...VdmsPartDetails\n  }\n  status\n  statusDMS\n  workshopId\n}\nfragment VdmsOperationDetails on VdmsOperation {\n  __typename\n  code\n  description\n  id\n  performedDate\n  quantity\n}\nfragment VdmsPartDetails on VdmsPart {\n  __typename\n  code\n  description\n  id\n  performedDate\n  quantity\n}\nfragment VdmsWltpDetails on VdmsWltpNedcData {\n  __typename\n  wltpCO2Unit\n  wltpElecEnergyConsumption\n  wltpElecEnergyUnit\n  wltpElecRange\n  wltpElecRangeUnit\n  wltpWeightedCombinedCO2\n}",
+                        variables: {
+                            locale: "de_DE",
+                            vin: vehicle.vin,
+                        },
+                    };
+                    this.sendRequest(vehicle.vin, data, "vdms");
                 }
             })
             .catch((error) => {
@@ -265,6 +274,31 @@ class Polestar extends utils.Adapter {
         });
     }
 
+    async sendRequest(vin, data, path) {
+        const headers = {
+            "content-type": "application/json",
+            accept: "*/*",
+            "explore-protocol-version": "4.2",
+            "x-polestarid-authorization": "Bearer " + this.session.access_token,
+        };
+        await this.requestClient({
+            method: "post",
+            url: "https://pc-api.polestar.com/eu-north-1/mesh/",
+            headers: headers,
+            data: JSON.stringify(data),
+        })
+            .then(async (res) => {
+                this.log.debug(JSON.stringify(res.data));
+
+                let result = res.data.data[Object.keys(res.data.data)[0]];
+                result = result[Object.keys(result)[1]];
+                this.json2iob.parse(vin + "." + path, result);
+            })
+            .catch((error) => {
+                this.log.error(error);
+                error.response && this.log.error(JSON.stringify(error.response.data));
+            });
+    }
     async refreshToken() {
         await this.requestClient({
             method: "post",
