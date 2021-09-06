@@ -86,7 +86,7 @@ class Polestar extends utils.Adapter {
         })
             .then((res) => {
                 this.log.debug(JSON.stringify(res.data));
-                return res.response.headers.location.split("resumePath=")[1].split("&client")[0];
+                return res.config.url.split("resumePath=")[1].split("&client")[0];
             })
             .catch((error) => {
                 error.response && this.log.error(JSON.stringify(error.response.data));
@@ -101,17 +101,16 @@ class Polestar extends utils.Adapter {
                 "accept-language": "de-de",
                 "user-agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 14_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.2 Mobile/15E148 Safari/604.1",
             },
-            data: qs.stringify({ "pf.username": this.config.username, "pf.password": this.config.password }),
+            data: qs.stringify({ "pf.username": this.config.username, "pf.pass": this.config.password }),
             jar: this.cookieJar,
             withCredentials: true,
-            maxRedirects: 0,
         })
             .then((res) => {
                 this.log.debug(JSON.stringify(res.data));
             })
             .catch((error) => {
-                if (error.response && error.response.status === 302) {
-                    return error.response.data.split("polestar-explore://explore.polestar.com?code=")[1].split("&state=")[0];
+                if (error.code === "ENOTFOUND") {
+                    return error.config.url.split("polestar-explore://explore.polestar.com?code=")[1].split("&state=")[0];
                 } else {
                     error.response && this.log.error(JSON.stringify(error.response.data));
                     this.log.error(error);
