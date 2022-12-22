@@ -32,6 +32,7 @@ class Polestar extends utils.Adapter {
     this.requestClient = axios.create({
       withCredentials: true,
       httpsAgent: new HttpsCookieAgent({
+        rejectUnauthorized: false,
         pfx: fs.readFileSync(__dirname + "/certs/cc_PROD_keystore.dat"),
         passphrase: "siuox3GxNazmVKRTXUPk7kcL",
         cookies: {
