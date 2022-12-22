@@ -11,6 +11,7 @@ const utils = require("@iobroker/adapter-core");
 const axios = require("axios").default;
 const fs = require("fs");
 const qs = require("qs");
+const https = require("https");
 const crypto = require("crypto");
 const Json2iob = require("./lib/json2iob");
 const mqtt = require("mqtt");
@@ -33,7 +34,8 @@ class Polestar extends utils.Adapter {
       withCredentials: true,
       httpsAgent: new HttpsCookieAgent({
         rejectUnauthorized: false,
-        pfx: fs.readFileSync(__dirname + "/certs/cc_PROD_keystore.dat"),
+        cert: fs.readFileSync(__dirname + "/certs/decryptedPfxFile.tmp"),
+        key: fs.readFileSync(__dirname + "/certs/decryptedPfxFile.tmp"),
         passphrase: "siuox3GxNazmVKRTXUPk7kcL",
         cookies: {
           jar: this.cookieJar,
@@ -99,12 +101,10 @@ class Polestar extends utils.Adapter {
         "&language=de&redirect_uri=polestar-explore://explore.polestar.com&access_token_manager_id=JWTpolxplore&client_id=polxplore&state=" +
         this.randomString(43),
       headers: headers,
-      jar: this.cookieJar,
-      withCredentials: true,
     })
       .then((res) => {
         this.log.debug(JSON.stringify(res.data));
-        return res.config.url.split("resumePath=")[1].split("&client")[0];
+        return res.request.path.split("resumePath=")[1].split("&client")[0];
       })
       .catch((error) => {
         error.response && this.log.error(JSON.stringify(error.response.data));
@@ -128,8 +128,8 @@ class Polestar extends utils.Adapter {
         this.log.debug(JSON.stringify(res.data));
       })
       .catch((error) => {
-        if (error.code === "ENOTFOUND") {
-          return error.config.url.split("polestar-explore://explore.polestar.com?code=")[1].split("&state=")[0];
+        if (error.message.includes("Unsupported protocol")) {
+          return qs.parse(error.request._options.path.slice(1)).code;
         } else {
           error.response && this.log.error(JSON.stringify(error.response.data));
           this.log.error(error);
@@ -213,7 +213,19 @@ Password: None
       });
     await this.requestClient({
       method: "get",
-      url: "https://cepmob.eu.prod.c3.volvocars.com/aee/telematics-base/released/internet/remote-vehicle-services-internet/",
+      url: "https://cepmob.eu.prod.c3.volvocars.com/aee/telematics-base/released/internet/remote-vehicle-services-internet/" + this.config.vin,
+      headers: headers,
+    })
+      .then((res) => {
+        this.log.info(JSON.stringify(res.data));
+      })
+      .catch((error) => {
+        error.response && this.log.error(JSON.stringify(error.response.data));
+        this.log.error(error);
+      });
+    await this.requestClient({
+      method: "get",
+      url: "https://cepmob.eu.prod.c3.volvocars.com/aee/telematics-base/released/internet/remote-vehicle-services-internet",
       headers: headers,
     })
       .then((res) => {
@@ -238,7 +250,14 @@ Password: None
       });
   }
   async connectMqtt() {
-    const client = mqtt.connect("mqtts://cepmobsig.eu.c3.volvocars.com", { clientId: "74c9c259-5f67-47e5-9d21-c82884edca06" });
+    const client = mqtt.connect("mqtts://cepmobsig.eu.c3.volvocars.com", {
+      rejectUnauthorized: false,
+      clientId: "74c9c259-5f67-47e5-9d21-c82884edca06",
+      reconnectPeriod: 0,
+      cert: fs.readFileSync(__dirname + "/certs/decryptedPfxFile.tmp"),
+      key: fs.readFileSync(__dirname + "/certs/decryptedPfxFile.tmp"),
+      passphrase: "siuox3GxNazmVKRTXUPk7kcL",
+    });
 
     client.on("connect", () => {
       this.log.info("Connected to MQTT");
@@ -258,6 +277,23 @@ Password: None
       // message is Buffer
       this.log.info("Received message on topic: " + topic);
       this.log.info(message.toString());
+    });
+    client.on("error", (message) => {
+      this.log.info("Received error");
+      this.log.info(message.toString());
+    });
+    client.on("close", (message) => {
+      this.log.info("Received close");
+      this.log.info(message);
+    });
+    client.on("offline", () => {
+      this.log.info("Received offline");
+    });
+    client.on("reconnect", () => {
+      this.log.info("Received reconnect");
+    });
+    client.on("disconnect", () => {
+      this.log.info("Received disconnect");
     });
   }
   async getVehicles() {
