@@ -211,27 +211,26 @@ Password: None
         error.response && this.log.error(JSON.stringify(error.response.data));
         this.log.error(error);
       });
-    await this.requestClient({
-      method: "get",
-      url: "https://cepmob.eu.prod.c3.volvocars.com/aee/telematics-base/released/internet/remote-vehicle-services-internet/" + this.config.vin,
-      headers: headers,
-    })
-      .then((res) => {
-        this.log.info(JSON.stringify(res.data));
-      })
-      .catch((error) => {
-        error.response && this.log.error(JSON.stringify(error.response.data));
-        this.log.error(error);
-      });
+
     await this.requestClient({
       method: "get",
       url: "https://cepmob.eu.prod.c3.volvocars.com/aee/telematics-base/released/internet/remote-vehicle-services-internet",
-      headers: headers,
+      headers: {
+        accept: "application/volvo.cloud.RemoteVehicleServices.v1+json",
+        volvoid: this.config.username,
+        vin: this.config.vin,
+        ecu: "TCAM1",
+        market: "DE",
+        "x-app-name": "Volvo",
+        authorization: "Bearer " + this.session.access_token,
+        "user-agent": "okhttp/4.9.0",
+      },
     })
       .then((res) => {
         this.log.info(JSON.stringify(res.data));
       })
       .catch((error) => {
+        this.log.error("aee remote");
         error.response && this.log.error(JSON.stringify(error.response.data));
         this.log.error(error);
       });
@@ -242,9 +241,24 @@ Password: None
       headers: headers,
     })
       .then((res) => {
+        this.log.info("ducs vin:");
         this.log.info(JSON.stringify(res.data));
       })
       .catch((error) => {
+        this.log.error("ducs vin");
+        error.response && this.log.error(JSON.stringify(error.response.data));
+        this.log.error(error);
+      });
+    await this.requestClient({
+      method: "get",
+      url: "https://cepmob.eu.prod.c3.volvocars.com/car-mdapi/car/" + this.config.vin,
+      headers: headers,
+    })
+      .then((res) => {
+        this.log.info(JSON.stringify(res.data));
+      })
+      .catch((error) => {
+        this.log.error("ducs vin");
         error.response && this.log.error(JSON.stringify(error.response.data));
         this.log.error(error);
       });
@@ -271,6 +285,8 @@ Password: None
           this.log.info("Subscribed to CA/DL/ROU/DEFAULT");
         }
       });
+      const rawHex = Buffer.from("", "hex");
+      // client.publish("CA/DL/ROU/DEFAULT", rawHex);
     });
 
     client.on("message", (topic, message) => {
