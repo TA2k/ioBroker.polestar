@@ -15,6 +15,10 @@
 
 Adapter for Polestar
 
+The adapter can read general information of the car but not receive the current status or send remote controls.
+The missing part is to decode the mqtt communication.
+
+
 
 ## Changelog
 
