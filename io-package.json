@@ -1,128 +1,122 @@
 {
-  "common": {
-    "name": "polestar",
-    "version": "1.0.0",
-    "news": {
-      "1.0.0": {
-        "en": "initial release based on website data",
-        "de": "erste Veröffentlichung basierend auf Website-Daten",
-        "ru": "первоначальное освобождение",
-        "pt": "libertação inicial",
-        "nl": "eerste release",
-        "fr": "libération initiale",
-        "it": "rilascio iniziale",
-        "es": "liberación inicial",
-        "pl": "początkowe zwolnienie",
-        "uk": "початковий реліз",
-        "zh-cn": "初步释放"
-      },
-      "0.0.1": {
-        "en": "initial release",
-        "de": "Erstveröffentlichung",
-        "ru": "Начальная версия",
-        "pt": "lançamento inicial",
-        "nl": "Eerste uitgave",
-        "fr": "Première version",
-        "it": "Versione iniziale",
-        "es": "Versión inicial",
-        "pl": "Pierwsze wydanie",
-        "uk": "Початкова версія",
-        "zh-cn": "首次出版"
-      }
+    "common": {
+        "name": "polestar",
+        "version": "1.0.0",
+        "news": {
+            "1.0.0": {
+                "en": "initial release based on website data",
+                "de": "erste Veröffentlichung basierend auf Website-Daten",
+                "ru": "первоначальное освобождение",
+                "pt": "libertação inicial",
+                "nl": "eerste release",
+                "fr": "libération initiale",
+                "it": "rilascio iniziale",
+                "es": "liberación inicial",
+                "pl": "początkowe zwolnienie",
+                "uk": "початковий реліз",
+                "zh-cn": "初步释放"
+            },
+            "0.0.1": {
+                "en": "initial release",
+                "de": "Erstveröffentlichung",
+                "ru": "Начальная версия",
+                "pt": "lançamento inicial",
+                "nl": "Eerste uitgave",
+                "fr": "Première version",
+                "it": "Versione iniziale",
+                "es": "Versión inicial",
+                "pl": "Pierwsze wydanie",
+                "uk": "Початкова версія",
+                "zh-cn": "首次出版"
+            }
+        },
+        "titleLang": {
+            "en": "Polestar",
+            "de": "Polestar",
+            "ru": "Полярная звезда",
+            "pt": "Estrela Polar",
+            "nl": "Poolster",
+            "fr": "Étoile polaire",
+            "it": "Stella polare",
+            "es": "estrella polar",
+            "pl": "Gwiazda Polarna",
+            "uk": "Полярна зірка",
+            "zh-cn": "北极星"
+        },
+        "desc": {
+            "en": "ioBroker Adapter for Polestar",
+            "de": "ioBroker-Adapter für Polestar",
+            "ru": "Адаптер ioBroker для Polestar",
+            "pt": "Adaptador ioBroker para Polestar",
+            "nl": "ioBroker-adapter voor Polestar",
+            "fr": "Adaptateur ioBroker pour Polestar",
+            "it": "Adattatore ioBroker per Polestar",
+            "es": "Adaptador ioBroker para Polestar",
+            "pl": "Adapter ioBroker dla Polestar",
+            "uk": "Адаптер ioBroker для Polestar",
+            "zh-cn": "Polestar 的 ioBroker 适配器"
+        },
+        "authors": ["TA2k <tombox2020@gmail.com>"],
+        "keywords": ["iobroker", "polestar"],
+        "licenseInformation": {
+            "type": "free",
+            "license": "MIT"
+        },
+        "platform": "Javascript/Node.js",
+        "icon": "polestar.png",
+        "enabled": true,
+        "extIcon": "https://raw.githubusercontent.com/TA2k/ioBroker.polestar/main/admin/polestar.png",
+        "readme": "https://github.com/TA2k/ioBroker.polestar/blob/main/README.md",
+        "loglevel": "info",
+        "tier": 3,
+        "mode": "daemon",
+        "type": "vehicle",
+        "compact": true,
+        "connectionType": "cloud",
+        "dataSource": "poll",
+        "adminUI": {
+            "config": "json"
+        },
+        "dependencies": [
+            {
+                "js-controller": ">=6.0.11"
+            }
+        ],
+        "globalDependencies": [
+            {
+                "admin": ">=7.6.17"
+            }
+        ]
     },
-    "titleLang": {
-      "en": "Polestar",
-      "de": "Polestar",
-      "ru": "Полярная звезда",
-      "pt": "Estrela Polar",
-      "nl": "Poolster",
-      "fr": "Étoile polaire",
-      "it": "Stella polare",
-      "es": "estrella polar",
-      "pl": "Gwiazda Polarna",
-      "uk": "Полярна зірка",
-      "zh-cn": "北极星"
+    "native": {
+        "email": "",
+        "password": "",
+        "interval": 300
     },
-    "desc": {
-      "en": "ioBroker Adapter for Polestar",
-      "de": "ioBroker-Adapter für Polestar",
-      "ru": "Адаптер ioBroker для Polestar",
-      "pt": "Adaptador ioBroker para Polestar",
-      "nl": "ioBroker-adapter voor Polestar",
-      "fr": "Adaptateur ioBroker pour Polestar",
-      "it": "Adattatore ioBroker per Polestar",
-      "es": "Adaptador ioBroker para Polestar",
-      "pl": "Adapter ioBroker dla Polestar",
-      "uk": "Адаптер ioBroker для Polestar",
-      "zh-cn": "Polestar 的 ioBroker 适配器"
-    },
-    "authors": [
-      "TA2k <tombox2020@gmail.com>"
-    ],
-    "keywords": [
-      "iobroker",
-      "polestar"
-    ],
-    "licenseInformation": {
-      "type": "free",
-      "license": "MIT"
-    },
-    "platform": "Javascript/Node.js",
-    "icon": "polestar.png",
-    "enabled": true,
-    "extIcon": "https://raw.githubusercontent.com/TA2k/ioBroker.polestar/main/admin/polestar.png",
-    "readme": "https://github.com/TA2k/ioBroker.polestar/blob/main/README.md",
-    "loglevel": "info",
-    "tier": 3,
-    "mode": "daemon",
-    "type": "vehicle",
-    "compact": true,
-    "connectionType": "cloud",
-    "dataSource": "poll",
-    "adminUI": {
-      "config": "json"
-    },
-    "dependencies": [
-      {
-        "js-controller": ">=6.0.11"
-      }
-    ],
-    "globalDependencies": [
-      {
-        "admin": ">=7.6.17"
-      }
+    "encryptedNative": ["password"],
+    "protectedNative": ["password"],
+    "objects": [],
+    "instanceObjects": [
+        {
+            "_id": "info",
+            "type": "channel",
+            "common": {
+                "name": "Information"
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.connection",
+            "type": "state",
+            "common": {
+                "role": "indicator.connected",
+                "name": "Device or service connected",
+                "type": "boolean",
+                "read": true,
+                "write": false,
+                "def": false
+            },
+            "native": {}
+        }
     ]
-  },
-  "native": {
-    "email": "",
-    "password": "",
-    "vin": "",
-    "interval": 300
-  },
-  "encryptedNative": ["password"],
-  "protectedNative": ["password"],
-  "objects": [],
-  "instanceObjects": [
-    {
-      "_id": "info",
-      "type": "channel",
-      "common": {
-        "name": "Information"
-      },
-      "native": {}
-    },
-    {
-      "_id": "info.connection",
-      "type": "state",
-      "common": {
-        "role": "indicator.connected",
-        "name": "Device or service connected",
-        "type": "boolean",
-        "read": true,
-        "write": false,
-        "def": false
-      },
-      "native": {}
-    }
-  ]
 }
