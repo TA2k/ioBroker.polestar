@@ -56,6 +56,143 @@ ioBroker Adapter for Polestar vehicles.
 ### Remote
 - `refresh` - Trigger manual data refresh
 
+## State Paths
+
+All states are located under `polestar.0.<VIN>.*`. Example paths:
+
+```text
+polestar.0.YSMVSEGEXPL110548.battery.batteryChargeLevelPercentage
+polestar.0.YSMVSEGEXPL110548.battery.chargingStatus
+polestar.0.YSMVSEGEXPL110548.battery.estimatedDistanceToEmptyKm
+polestar.0.YSMVSEGEXPL110548.odometer.odometerKm
+polestar.0.YSMVSEGEXPL110548.health.daysToService
+polestar.0.YSMVSEGEXPL110548.remote.refresh
+```
+
+## State Values
+
+### chargingStatus
+
+| Value | Description |
+|-------|-------------|
+| `CHARGING_STATUS_IDLE` | Not charging |
+| `CHARGING_STATUS_CHARGING` | Currently charging |
+| `CHARGING_STATUS_DONE` | Charging complete |
+| `CHARGING_STATUS_SCHEDULED` | Scheduled charging |
+| `CHARGING_STATUS_SMART_CHARGING` | Smart charging active |
+| `CHARGING_STATUS_FAULT` | Charging fault |
+| `CHARGING_STATUS_ERROR` | Charging error |
+
+### serviceWarning
+
+| Value | Description |
+|-------|-------------|
+| `SERVICE_WARNING_NO_WARNING` | No service needed |
+| `SERVICE_WARNING_SERVICE_REQUIRED` | Service required |
+| `SERVICE_WARNING_REGULAR_MAINTENANCE_ALMOST_TIME_FOR_SERVICE` | Service soon |
+| `SERVICE_WARNING_REGULAR_MAINTENANCE_TIME_FOR_SERVICE` | Time for service |
+| `SERVICE_WARNING_REGULAR_MAINTENANCE_OVERDUE_FOR_SERVICE` | Service overdue |
+
+### Warning States (brakeFluidLevelWarning, engineCoolantLevelWarning, oilLevelWarning)
+
+| Value | Description |
+|-------|-------------|
+| `*_NO_WARNING` | No warning |
+| `*_TOO_LOW` | Level too low |
+| `*_TOO_HIGH` | Level too high (oil only) |
+
+## Scripting Examples
+
+### JavaScript: Check Battery and Send Notification
+
+```javascript
+// Check battery level every hour and notify if low
+on({ id: 'polestar.0.*.battery.batteryChargeLevelPercentage', change: 'ne' }, function (obj) {
+    if (obj.state.val < 20) {
+        sendTo('telegram.0', {
+            text: `Polestar Akku niedrig: ${obj.state.val}%`
+        });
+    }
+});
+```
+
+### JavaScript: Log Charging Status Changes
+
+```javascript
+on({ id: 'polestar.0.*.battery.chargingStatus', change: 'ne' }, function (obj) {
+    const statusMap = {
+        'CHARGING_STATUS_IDLE': 'Nicht laden',
+        'CHARGING_STATUS_CHARGING': 'Laden',
+        'CHARGING_STATUS_DONE': 'Vollgeladen',
+        'CHARGING_STATUS_SCHEDULED': 'Geplant'
+    };
+    log(`Polestar Ladestatus: ${statusMap[obj.state.val] || obj.state.val}`);
+});
+```
+
+### JavaScript: Calculate Daily Driving Distance
+
+```javascript
+// Save odometer at midnight and calculate daily distance
+schedule('0 0 * * *', function () {
+    const odometer = getState('polestar.0.YSMVSEGEXPL110548.odometer.odometerKm').val;
+    const yesterday = getState('0_userdata.0.polestar.lastOdometer').val || odometer;
+    const distance = odometer - yesterday;
+
+    setState('0_userdata.0.polestar.lastOdometer', odometer, true);
+    setState('0_userdata.0.polestar.dailyDistance', distance, true);
+
+    log(`Heute gefahren: ${distance} km`);
+});
+```
+
+### JavaScript: Charging Complete Notification with Time
+
+```javascript
+on({ id: 'polestar.0.*.battery.chargingStatus', val: 'CHARGING_STATUS_DONE' }, function (obj) {
+    const battery = getState(obj.id.replace('chargingStatus', 'batteryChargeLevelPercentage')).val;
+    const range = getState(obj.id.replace('chargingStatus', 'estimatedDistanceToEmptyKm')).val;
+
+    sendTo('pushover.0', {
+        message: `Polestar vollgeladen!\nAkku: ${battery}%\nReichweite: ${range} km`,
+        title: 'Ladevorgang beendet'
+    });
+});
+```
+
+### JavaScript: Service Reminder
+
+```javascript
+// Check service status daily
+schedule('0 8 * * *', function () {
+    const daysToService = getState('polestar.0.YSMVSEGEXPL110548.health.daysToService').val;
+    const kmToService = getState('polestar.0.YSMVSEGEXPL110548.health.distanceToServiceKm').val;
+
+    if (daysToService < 30 || kmToService < 1000) {
+        sendTo('email.0', {
+            to: 'user@example.com',
+            subject: 'Polestar Service bald faellig',
+            text: `Service in ${daysToService} Tagen oder ${kmToService} km`
+        });
+    }
+});
+```
+
+### Blockly: Battery Low Warning
+
+Use the following trigger in Blockly:
+
+- Trigger: `polestar.0.*.battery.batteryChargeLevelPercentage`
+- Condition: Value < 20
+- Action: Send notification
+
+### VIS Widget Binding
+
+```text
+{polestar.0.YSMVSEGEXPL110548.battery.batteryChargeLevelPercentage} %
+{polestar.0.YSMVSEGEXPL110548.battery.estimatedDistanceToEmptyKm} km
+```
+
 ## Changelog
 <!--
     Placeholder for the next version (at the beginning of the line):
