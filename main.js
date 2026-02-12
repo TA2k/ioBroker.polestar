@@ -316,7 +316,6 @@ class Polestar extends utils.Adapter {
                                 performanceOptimization { value description timestamp }
                             }
                             latestClaimStatus { mileage mileageUnit registeredDate vehicleAge }
-                            internalCar { origin registeredAt }
                             edition
                             commonStatusPoint { code timestamp description }
                             brandStatus { code timestamp description }
