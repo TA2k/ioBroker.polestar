@@ -1,6 +1,6 @@
 {
   "name": "iobroker.polestar",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "ioBroker Adapter for Polestar",
   "author": {
     "name": "TA2k",
