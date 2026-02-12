@@ -196,17 +196,7 @@ class Polestar extends utils.Adapter {
         }
 
         try {
-            const response = await this.requestClient({
-                method: 'post',
-                url: 'https://pc-api.polestar.com/eu-north-1/mystar-v2/',
-                headers: {
-                    'content-type': 'application/json',
-                    Authorization: `Bearer ${this.session.access_token}`,
-                },
-                data: {
-                    operationName: 'GetConsumerCarsV2',
-                    variables: {},
-                    query: `query GetConsumerCarsV2 {
+            const query = `query GetConsumerCarsV2 {
                         getConsumerCarsV2 {
                             vin
                             internalVehicleIdentifier
