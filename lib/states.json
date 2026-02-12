@@ -1,0 +1,41 @@
+{
+    "chargingStatus": {
+        "CHARGING_STATUS_DONE": "Done",
+        "CHARGING_STATUS_IDLE": "Idle",
+        "CHARGING_STATUS_CHARGING": "Charging",
+        "CHARGING_STATUS_FAULT": "Fault",
+        "CHARGING_STATUS_UNSPECIFIED": "Unspecified",
+        "CHARGING_STATUS_SCHEDULED": "Scheduled",
+        "CHARGING_STATUS_DISCHARGING": "Discharging",
+        "CHARGING_STATUS_ERROR": "Error",
+        "CHARGING_STATUS_SMART_CHARGING": "Smart Charging"
+    },
+    "serviceWarning": {
+        "SERVICE_WARNING_NO_WARNING": "No Warning",
+        "SERVICE_WARNING_UNSPECIFIED": "Unspecified",
+        "SERVICE_WARNING_SERVICE_REQUIRED": "Service Required",
+        "SERVICE_WARNING_REGULAR_MAINTENANCE_ALMOST_TIME_FOR_SERVICE": "Almost Time For Service",
+        "SERVICE_WARNING_DISTANCE_DRIVEN_ALMOST_TIME_FOR_SERVICE": "Distance - Almost Time",
+        "SERVICE_WARNING_REGULAR_MAINTENANCE_TIME_FOR_SERVICE": "Time For Service",
+        "SERVICE_WARNING_DISTANCE_DRIVEN_TIME_FOR_SERVICE": "Distance - Time For Service",
+        "SERVICE_WARNING_REGULAR_MAINTENANCE_OVERDUE_FOR_SERVICE": "Overdue For Service",
+        "SERVICE_WARNING_DISTANCE_DRIVEN_OVERDUE_FOR_SERVICE": "Distance - Overdue"
+    },
+    "brakeFluidLevelWarning": {
+        "BRAKE_FLUID_LEVEL_WARNING_NO_WARNING": "No Warning",
+        "BRAKE_FLUID_LEVEL_WARNING_UNSPECIFIED": "Unspecified",
+        "BRAKE_FLUID_LEVEL_WARNING_TOO_LOW": "Too Low"
+    },
+    "engineCoolantLevelWarning": {
+        "ENGINE_COOLANT_LEVEL_WARNING_NO_WARNING": "No Warning",
+        "ENGINE_COOLANT_LEVEL_WARNING_UNSPECIFIED": "Unspecified",
+        "ENGINE_COOLANT_LEVEL_WARNING_TOO_LOW": "Too Low"
+    },
+    "oilLevelWarning": {
+        "OIL_LEVEL_WARNING_NO_WARNING": "No Warning",
+        "OIL_LEVEL_WARNING_UNSPECIFIED": "Unspecified",
+        "OIL_LEVEL_WARNING_TOO_LOW": "Too Low",
+        "OIL_LEVEL_WARNING_TOO_HIGH": "Too High",
+        "OIL_LEVEL_WARNING_SERVICE_REQUIRED": "Service Required"
+    }
+}

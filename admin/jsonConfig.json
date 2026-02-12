@@ -1,0 +1,73 @@
+{
+    "type": "panel",
+    "items": {
+        "email": {
+            "type": "text",
+            "label": {
+                "en": "Email",
+                "de": "E-Mail",
+                "ru": "Электронная почта",
+                "pt": "E-mail",
+                "nl": "E-mail",
+                "fr": "E-mail",
+                "it": "E-mail",
+                "es": "Correo electrónico",
+                "pl": "E-mail",
+                "uk": "Електронна пошта",
+                "zh-cn": "电子邮件"
+            },
+            "placeholder": "your@email.com",
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4
+        },
+        "password": {
+            "type": "password",
+            "label": {
+                "en": "Password",
+                "de": "Passwort",
+                "ru": "Пароль",
+                "pt": "Senha",
+                "nl": "Wachtwoord",
+                "fr": "Mot de passe",
+                "it": "Password",
+                "es": "Contraseña",
+                "pl": "Hasło",
+                "uk": "Пароль",
+                "zh-cn": "密码"
+            },
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4
+        },
+        "interval": {
+            "type": "number",
+            "label": {
+                "en": "Update interval (seconds)",
+                "de": "Aktualisierungsintervall (Sekunden)",
+                "ru": "Интервал обновления (секунды)",
+                "pt": "Intervalo de atualização (segundos)",
+                "nl": "Update-interval (seconden)",
+                "fr": "Intervalle de mise à jour (secondes)",
+                "it": "Intervallo di aggiornamento (secondi)",
+                "es": "Intervalo de actualización (segundos)",
+                "pl": "Interwał aktualizacji (sekundy)",
+                "uk": "Інтервал оновлення (секунди)",
+                "zh-cn": "更新间隔（秒）"
+            },
+            "min": 60,
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4
+        }
+    }
+}

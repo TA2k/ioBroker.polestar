@@ -1,15 +1,12 @@
 {
     "cli": true,
+    "target": "directory",
     "adapterName": "polestar",
     "title": "Polestar",
-    "description": "Adapter for Polestar",
-    "keywords": [
-        "polestar"
-    ],
+    "description": "ioBroker Adapter for Polestar",
+    "keywords": ["iobroker", "polestar"],
     "expert": "yes",
-    "features": [
-        "adapter"
-    ],
+    "features": ["adapter"],
     "adminFeatures": [],
     "type": "vehicle",
     "startMode": "daemon",
@@ -17,23 +14,21 @@
     "dataSource": "poll",
     "connectionIndicator": "yes",
     "language": "JavaScript",
-    "adminReact": "no",
-    "tools": [
-        "ESLint",
-        "type checking"
-    ],
-    "releaseScript": "no",
+    "nodeVersion": "20",
+    "adminUi": "json",
+    "tools": ["ESLint", "type checking", "Prettier"],
+    "eslintConfig": "official",
+    "releaseScript": "yes",
     "devServer": "no",
     "indentation": "Space (4)",
-    "quotes": "double",
-    "es6class": "yes",
+    "quotes": "single",
     "authorName": "TA2k",
     "authorGithub": "TA2k",
     "authorEmail": "tombox2020@gmail.com",
     "gitRemoteProtocol": "HTTPS",
     "gitCommit": "no",
+    "defaultBranch": "main",
     "license": "MIT License",
-    "ci": "gh-actions",
     "dependabot": "no",
-    "creatorVersion": "1.34.1"
+    "creatorVersion": "3.1.2"
 }

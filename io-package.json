@@ -1,102 +1,108 @@
 {
-  "common": {
-    "name": "polestar",
-    "version": "0.0.2",
-    "news": {
-      "0.0.1": {
-        "en": "initial release",
-        "de": "Erstveröffentlichung",
-        "ru": "Начальная версия",
-        "pt": "lançamento inicial",
-        "nl": "Eerste uitgave",
-        "fr": "Première version",
-        "it": "Versione iniziale",
-        "es": "Versión inicial",
-        "pl": "Pierwsze wydanie",
-        "zh-cn": "首次出版"
-      }
+    "common": {
+        "name": "polestar",
+        "version": "0.0.1",
+        "news": {
+            "0.0.1": {
+                "en": "initial release",
+                "de": "Erstveröffentlichung",
+                "ru": "Начальная версия",
+                "pt": "lançamento inicial",
+                "nl": "Eerste uitgave",
+                "fr": "Première version",
+                "it": "Versione iniziale",
+                "es": "Versión inicial",
+                "pl": "Pierwsze wydanie",
+                "uk": "Початкова версія",
+                "zh-cn": "首次出版"
+            }
+        },
+        "titleLang": {
+            "en": "Polestar",
+            "de": "Polestar",
+            "ru": "Полярная звезда",
+            "pt": "Estrela Polar",
+            "nl": "Poolster",
+            "fr": "Étoile polaire",
+            "it": "Stella polare",
+            "es": "estrella polar",
+            "pl": "Gwiazda Polarna",
+            "uk": "Полярна зірка",
+            "zh-cn": "北极星"
+        },
+        "desc": {
+            "en": "ioBroker Adapter for Polestar",
+            "de": "ioBroker-Adapter für Polestar",
+            "ru": "Адаптер ioBroker для Polestar",
+            "pt": "Adaptador ioBroker para Polestar",
+            "nl": "ioBroker-adapter voor Polestar",
+            "fr": "Adaptateur ioBroker pour Polestar",
+            "it": "Adattatore ioBroker per Polestar",
+            "es": "Adaptador ioBroker para Polestar",
+            "pl": "Adapter ioBroker dla Polestar",
+            "uk": "Адаптер ioBroker для Polestar",
+            "zh-cn": "Polestar 的 ioBroker 适配器"
+        },
+        "authors": ["TA2k <tombox2020@gmail.com>"],
+        "keywords": ["iobroker", "polestar"],
+        "licenseInformation": {
+            "type": "free",
+            "license": "MIT"
+        },
+        "platform": "Javascript/Node.js",
+        "icon": "polestar.png",
+        "enabled": true,
+        "extIcon": "https://raw.githubusercontent.com/TA2k/ioBroker.polestar/main/admin/polestar.png",
+        "readme": "https://github.com/TA2k/ioBroker.polestar/blob/main/README.md",
+        "loglevel": "info",
+        "tier": 3,
+        "mode": "daemon",
+        "type": "vehicle",
+        "compact": true,
+        "connectionType": "cloud",
+        "dataSource": "poll",
+        "adminUI": {
+            "config": "json"
+        },
+        "dependencies": [
+            {
+                "js-controller": ">=6.0.11"
+            }
+        ],
+        "globalDependencies": [
+            {
+                "admin": ">=7.0.23"
+            }
+        ]
     },
-    "titleLang": {
-      "en": "Polestar",
-      "de": "Polestar",
-      "ru": "Полярная звезда",
-      "pt": "Estrela polar",
-      "nl": "Poolster",
-      "fr": "L'Etoile polaire",
-      "it": "Stella polare",
-      "es": "Estrella Polar",
-      "pl": "Gwiazda Polarna",
-      "zh-cn": "极星"
+    "native": {
+        "email": "",
+        "password": "",
+        "vin": "",
+        "interval": 300
     },
-    "desc": {
-      "en": "Adapter for Polestar",
-      "de": "Adapter für Polestar",
-      "ru": "Адаптер для Polestar",
-      "pt": "Adaptador para Polestar",
-      "nl": "Adapter voor Polestar",
-      "fr": "Adaptateur pour Polestar",
-      "it": "Adattatore per Polestar",
-      "es": "Adaptador para Polestar",
-      "pl": "Adapter do Polestar",
-      "zh-cn": "Polestar 适配器"
-    },
-    "authors": ["TA2k <tombox2020@gmail.com>"],
-    "keywords": ["polestar"],
-    "license": "MIT",
-    "platform": "Javascript/Node.js",
-    "main": "main.js",
-    "icon": "polestar.png",
-    "enabled": true,
-    "extIcon": "https://raw.githubusercontent.com/TA2k/ioBroker.polestar/master/admin/polestar.png",
-    "readme": "https://github.com/TA2k/ioBroker.polestar/blob/master/README.md",
-    "loglevel": "info",
-    "mode": "daemon",
-    "type": "vehicle",
-    "compact": true,
-    "connectionType": "cloud",
-    "dataSource": "poll",
-    "materialize": true,
-    "dependencies": [
-      {
-        "js-controller": ">=3.0.0"
-      }
-    ],
-    "globalDependencies": [
-      {
-        "admin": ">=4.0.9"
-      }
+    "objects": [],
+    "instanceObjects": [
+        {
+            "_id": "info",
+            "type": "channel",
+            "common": {
+                "name": "Information"
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.connection",
+            "type": "state",
+            "common": {
+                "role": "indicator.connected",
+                "name": "Device or service connected",
+                "type": "boolean",
+                "read": true,
+                "write": false,
+                "def": false
+            },
+            "native": {}
+        }
     ]
-  },
-  "encryptedNative": ["password"],
-  "protectedNative": ["password"],
-  "native": {
-    "username": "",
-    "vin": "",
-    "password": "",
-    "interval": 5
-  },
-  "objects": [],
-  "instanceObjects": [
-    {
-      "_id": "info",
-      "type": "channel",
-      "common": {
-        "name": "Information"
-      },
-      "native": {}
-    },
-    {
-      "_id": "info.connection",
-      "type": "state",
-      "common": {
-        "role": "indicator.connected",
-        "name": "Device or service connected",
-        "type": "boolean",
-        "read": true,
-        "write": false,
-        "def": false
-      },
-      "native": {}
-    }
-  ]
 }
