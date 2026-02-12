@@ -199,7 +199,7 @@ Use the following trigger in Blockly:
     ### **WORK IN PROGRESS**
 -->
 ### 1.0.0 (2026-02-12)
-* (TA2k) initial release
+* (TA2k) initial release based on website data
 
 ## License
 MIT License

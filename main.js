@@ -178,7 +178,7 @@ class Polestar extends utils.Adapter {
 
             if (response.data?.access_token) {
                 this.session = response.data;
-                this.log.info(`Token refreshed, expires in ${this.session.expires_in}s`);
+                this.log.debug(`Token refreshed, expires in ${this.session.expires_in}s`);
                 this.startRefreshTokenInterval();
             } else {
                 this.log.warn('Token refresh failed, logging in again');
