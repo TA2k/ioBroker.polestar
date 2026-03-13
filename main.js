@@ -130,7 +130,26 @@ class Polestar extends utils.Adapter {
                 validateStatus: () => true,
             });
 
-            const code = loginResponse.headers.location?.match(/code=([^&]+)/)?.[1];
+            let code = loginResponse.headers.location?.match(/code=([^&]+)/)?.[1];
+
+            // Handle Terms & Conditions acceptance
+            if (!code) {
+                const uid = loginResponse.headers.location?.match(/uid=([^&]+)/)?.[1];
+                if (uid) {
+                    this.log.info('Accepting updated Terms & Conditions...');
+                    const tcResponse = await this.requestClient({
+                        method: 'post',
+                        url: `https://polestarid.eu.polestar.com/as/${pathToken}/resume/as/authorization.ping`,
+                        params: { client_id: 'l3oopkc_10' },
+                        headers: { 'content-type': 'application/x-www-form-urlencoded' },
+                        data: { 'pf.submit': true, subject: uid },
+                        maxRedirects: 0,
+                        validateStatus: () => true,
+                    });
+                    code = tcResponse.headers.location?.match(/code=([^&]+)/)?.[1];
+                }
+            }
+
             if (!code) {
                 this.log.error('Login failed - check credentials');
                 return;
@@ -195,6 +214,7 @@ class Polestar extends utils.Adapter {
             return;
         }
 
+        // Step 1: Minimal request to get VINs - ensures adapter can start
         try {
             const response = await this.requestClient({
                 method: 'post',
@@ -209,128 +229,7 @@ class Polestar extends utils.Adapter {
                     query: `query GetConsumerCarsV2 {
                         getConsumerCarsV2 {
                             vin
-                            internalVehicleIdentifier
-                            salesType
-                            currentPlannedDeliveryDate
-                            market
-                            originalMarket
-                            pno34
-                            modelYear
-                            registrationNo
-                            metaOrderNumber
-                            factoryCompleteDate
-                            registrationDate
-                            deliveryDate
-                            serviceHistory {
-                                claimType
-                                market
-                                mileage
-                                mileageUnit
-                                operations { id code description quantity performedDate }
-                                orderEndDate
-                                orderNumber
-                                orderStartDate
-                                parts { id code description quantity performedDate }
-                                statusDMS
-                                symptomCode
-                                vehicleAge
-                                workshopId
-                            }
-                            content {
-                                exterior { code name description excluded }
-                                exteriorDetails { code name description excluded }
-                                interior { code name description excluded }
-                                performancePackage { code name description excluded }
-                                performanceOptimizationSpecification {
-                                    power { value unit }
-                                    torqueMax { value unit }
-                                    acceleration { value unit description }
-                                }
-                                wheels { code name description excluded }
-                                plusPackage { code name description excluded }
-                                pilotPackage { code name description excluded }
-                                motor { name description excluded }
-                                model { name code }
-                                specification {
-                                    battery
-                                    bodyType
-                                    brakes
-                                    combustionEngine
-                                    electricMotors
-                                    performance
-                                    suspension
-                                    tireSizes
-                                    torque
-                                    totalHp
-                                    totalKw
-                                    trunkCapacity { label value }
-                                }
-                                dimensions {
-                                    wheelbase { label value }
-                                    groundClearanceWithPerformance { label value }
-                                    groundClearanceWithoutPerformance { label value }
-                                    dimensions { label value }
-                                }
-                                towbar { code name description excluded }
-                            }
-                            primaryDriver
-                            primaryDriverRegistrationTimestamp
-                            owners { id registeredAt information { polestarId ownerType } }
-                            wltpNedcData {
-                                wltpCO2Unit
-                                wltpElecEnergyConsumption
-                                wltpElecEnergyUnit
-                                wltpElecRange
-                                wltpElecRangeUnit
-                                wltpWeightedCombinedCO2
-                                wltpWeightedCombinedFuelConsumption
-                                wltpWeightedCombinedFuelConsumptionUnit
-                            }
-                            energy {
-                                elecRange
-                                elecRangeUnit
-                                elecEnergyConsumption
-                                elecEnergyUnit
-                                weightedCombinedCO2
-                                weightedCombinedCO2Unit
-                                weightedCombinedFuelConsumption
-                                weightedCombinedFuelConsumptionUnit
-                            }
-                            fuelType
-                            drivetrain
-                            numberOfDoors
-                            numberOfSeats
-                            motor { description code }
-                            maxTrailerWeight { value unit }
-                            curbWeight { value unit }
-                            hasPerformancePackage
-                            numberOfCylinders
-                            cylinderVolume
-                            cylinderVolumeUnit
-                            transmission
-                            numberOfGears
-                            structureWeek
-                            software {
-                                version
-                                versionTimestamp
-                                performanceOptimization { value description timestamp }
-                            }
-                            latestClaimStatus { mileage mileageUnit registeredDate vehicleAge }
-                            edition
-                            commonStatusPoint { code timestamp description }
-                            brandStatus { code timestamp description }
-                            intermediateDestinationCode
-                            partnerDestinationCode
-                            features {
-                                type
-                                code
-                                name
-                                description
-                                excluded
-                                galleryImage { url alt }
-                                thumbnail { url alt }
-                            }
-                            electricalEngineNumbers { number placement }
+                            content { model { name } }
                         }
                     }`,
                 },
@@ -371,11 +270,95 @@ class Polestar extends utils.Adapter {
                     },
                     native: {},
                 });
-
-                this.json2iob.parse(`${vehicle.vin}.general`, vehicle, { forceIndex: true, descriptions, states });
             }
         } catch (error) {
             this.log.error(`Get vehicles error: ${error.message}`);
+            return;
+        }
+
+        // Step 2: Full vehicle details - non-blocking, adapter continues if this fails
+        await this.getVehicleDetails();
+    }
+
+    async getVehicleDetails() {
+        try {
+            const response = await this.requestClient({
+                method: 'post',
+                url: 'https://pc-api.polestar.com/eu-north-1/mystar-v2/',
+                headers: {
+                    'content-type': 'application/json',
+                    Authorization: `Bearer ${this.session.access_token}`,
+                },
+                data: {
+                    operationName: 'GetConsumerCarsV2',
+                    variables: {},
+                    query: `query GetConsumerCarsV2 {
+                        getConsumerCarsV2 {
+                            vin
+                            internalVehicleIdentifier
+                            registrationNo
+                            market
+                            originalMarket
+                            currentPlannedDeliveryDate
+                            deliveryDate
+                            edition
+                            pno34
+                            hasPerformancePackage
+                            modelYear
+                            commercialModelYear
+                            computedModelYear
+                            structureWeek
+                            primaryDriver
+                            userIsPrimaryDriver
+                            content {
+                                exterior { code name description excluded }
+                                exteriorDetails { code name description excluded }
+                                interior { code name description excluded }
+                                performancePackage { code name description excluded }
+                                performanceOptimizationSpecification {
+                                    power { value unit }
+                                    torqueMax { value unit }
+                                    acceleration { value unit description }
+                                }
+                                wheels { code name description excluded }
+                                plusPackage { code name description excluded }
+                                pilotPackage { code name description excluded }
+                                motor { name description excluded }
+                                model { name code }
+                                specification {
+                                    battery
+                                    bodyType
+                                    brakes
+                                    combustionEngine
+                                    electricMotors
+                                    performance
+                                    suspension
+                                    tireSizes
+                                    torque
+                                    totalHp
+                                    totalKw
+                                    trunkCapacity { label value }
+                                }
+                                dimensions {
+                                    wheelbase { label value }
+                                    groundClearanceWithPerformance { label value }
+                                    groundClearanceWithoutPerformance { label value }
+                                    dimensions { label value }
+                                }
+                                towbar { code name description excluded }
+                            }
+                        }
+                    }`,
+                },
+            });
+
+            const vehicles = response.data.data?.getConsumerCarsV2 || [];
+            for (const vehicle of vehicles) {
+                this.json2iob.parse(`${vehicle.vin}.general`, vehicle, { forceIndex: true, descriptions, states });
+            }
+            this.log.debug('Vehicle details loaded');
+        } catch (error) {
+            this.log.warn(`Get vehicle details error (non-blocking): ${error.message}`);
         }
     }
 
@@ -427,6 +410,14 @@ class Polestar extends utils.Adapter {
 }`,
                 },
             });
+
+            // Check for GraphQL UNAUTHENTICATED error in 200 response
+            const gqlError = response.data.errors?.[0];
+            if (gqlError?.extensions?.code === 'UNAUTHENTICATED' && retry) {
+                this.log.warn('GraphQL UNAUTHENTICATED, refreshing token...');
+                await this.refreshToken();
+                return this.updateVehicleData(false);
+            }
 
             const data = response.data.data?.carTelematicsV2;
             if (data) {
