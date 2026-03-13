@@ -1,122 +1,144 @@
 {
-    "common": {
-        "name": "polestar",
-        "version": "1.0.0",
-        "news": {
-            "1.0.0": {
-                "en": "initial release based on website data",
-                "de": "erste Veröffentlichung basierend auf Website-Daten",
-                "ru": "первоначальное освобождение",
-                "pt": "libertação inicial",
-                "nl": "eerste release",
-                "fr": "libération initiale",
-                "it": "rilascio iniziale",
-                "es": "liberación inicial",
-                "pl": "początkowe zwolnienie",
-                "uk": "початковий реліз",
-                "zh-cn": "初步释放"
-            },
-            "0.0.1": {
-                "en": "initial release",
-                "de": "Erstveröffentlichung",
-                "ru": "Начальная версия",
-                "pt": "lançamento inicial",
-                "nl": "Eerste uitgave",
-                "fr": "Première version",
-                "it": "Versione iniziale",
-                "es": "Versión inicial",
-                "pl": "Pierwsze wydanie",
-                "uk": "Початкова версія",
-                "zh-cn": "首次出版"
-            }
-        },
-        "titleLang": {
-            "en": "Polestar",
-            "de": "Polestar",
-            "ru": "Полярная звезда",
-            "pt": "Estrela Polar",
-            "nl": "Poolster",
-            "fr": "Étoile polaire",
-            "it": "Stella polare",
-            "es": "estrella polar",
-            "pl": "Gwiazda Polarna",
-            "uk": "Полярна зірка",
-            "zh-cn": "北极星"
-        },
-        "desc": {
-            "en": "ioBroker Adapter for Polestar",
-            "de": "ioBroker-Adapter für Polestar",
-            "ru": "Адаптер ioBroker для Polestar",
-            "pt": "Adaptador ioBroker para Polestar",
-            "nl": "ioBroker-adapter voor Polestar",
-            "fr": "Adaptateur ioBroker pour Polestar",
-            "it": "Adattatore ioBroker per Polestar",
-            "es": "Adaptador ioBroker para Polestar",
-            "pl": "Adapter ioBroker dla Polestar",
-            "uk": "Адаптер ioBroker для Polestar",
-            "zh-cn": "Polestar 的 ioBroker 适配器"
-        },
-        "authors": ["TA2k <tombox2020@gmail.com>"],
-        "keywords": ["iobroker", "polestar"],
-        "licenseInformation": {
-            "type": "free",
-            "license": "MIT"
-        },
-        "platform": "Javascript/Node.js",
-        "icon": "polestar.png",
-        "enabled": true,
-        "extIcon": "https://raw.githubusercontent.com/TA2k/ioBroker.polestar/main/admin/polestar.png",
-        "readme": "https://github.com/TA2k/ioBroker.polestar/blob/main/README.md",
-        "loglevel": "info",
-        "tier": 3,
-        "mode": "daemon",
-        "type": "vehicle",
-        "compact": true,
-        "connectionType": "cloud",
-        "dataSource": "poll",
-        "adminUI": {
-            "config": "json"
-        },
-        "dependencies": [
-            {
-                "js-controller": ">=6.0.11"
-            }
-        ],
-        "globalDependencies": [
-            {
-                "admin": ">=7.6.17"
-            }
-        ]
+  "common": {
+    "name": "polestar",
+    "version": "1.0.1",
+    "news": {
+      "1.0.1": {
+        "en": "Adapt to Polestar API changes - remove unavailable fields\nSplit vehicle fetch into minimal + full request for robustness\nAdd Terms & Conditions auto-acceptance in login flow\nDetect GraphQL UNAUTHENTICATED errors in HTTP 200 responses",
+        "de": "Anpassung an Polestar API-Änderungen - Entfernen Sie nicht verfügbare Felder\nSplit Fahrzeug-Fetch in minimal + volle Anforderung an Robustheit\nAutoakzeptanz in Login-Flow hinzufügen\nErkennen Sie GraphQL UNAUTHENTICATED Fehler in HTTP 200 Antworten",
+        "ru": "Адаптация к изменениям Polestar API - удаление недоступных полей\nРазделенный автомобиль в минимальную + полный запрос на надежность\nДобавить Условия и положения автоматическое принятие в потоке входа\nОбнаружить GraphQL недостоверно Ошибки в ответах HTTP 200",
+        "pt": "Adaptar-se às alterações da API Polestar - remover campos indisponíveis\nDividir a busca do veículo em mínimo + pedido completo de robustez\nAdicionar Termos & Condições de aceitação automática no fluxo de login\nDetectar o GraphQL UNAUTENTICADO erros nas respostas HTTP 200",
+        "nl": "Aanpassen aan Polestar API-wijzigingen - niet beschikbare velden verwijderen\nGesplitst voertuig halen in minimale + volledige aanvraag voor robuustheid\nAlgemene voorwaarden automatisch accepteren in loginstroom toevoegen\nGraphQL ongeautoriseerd detecteren fouten in HTTP 200 antwoorden",
+        "fr": "Adapter aux modifications de l'API Polestar - supprimer les champs non disponibles\nRécupérer le véhicule divisé en minimum + demande complète de robustesse\nAjouter les termes et conditions auto-acceptation dans le flux de connexion\nDétecter GraphQL non authentiqué erreurs dans les réponses HTTP 200",
+        "it": "Adapt to Polestar API change - rimuovere i campi non disponibili\nAttacco veicolo diviso in minimo + richiesta completa per robustezza\nAggiungi Termini e Condizioni di accettazione automatica nel flusso di login\nRiconoscere GraphQL UNAUTHENTICATE errori nelle risposte HTTP 200",
+        "es": "Adaptarse a los cambios de la API de Polestar - eliminar campos no disponibles\nVehículo de división en mínima + solicitud completa de robustez\nAgregar términos \" Condiciones de autoaceptación en el flujo de inicio de sesión\nDetectar UAUTHENTICATO errores en las respuestas HTTP 200",
+        "pl": "Dostosowanie do zmian API Polestar - usunięcie niedostępnych pól\nPojazd podzielony pobrać do minimum + pełna prośba o wytrzymałość\nDodaj warunki i warunki autoakceptacji w przepływie logowania\nWykrywanie GraphQL UNAUTHENTICCATED błędy w odpowiedziach HTTP 200",
+        "uk": "Адаптація до Полісся API змін - видаліть поля недоступні\nСпліт автомобіля fetch в мінімальний + повний запит для надійності\nДодати Умови та умови автоприймання в логінному режимі\nВиявлення графіка помилки в HTTP 200 відповіді",
+        "zh-cn": "适应 Polestar API 更改 - 删除无法使用的字段\n将车辆拆分成最低 + 完全要求坚固\n在登录流程中添加术语和条件自动接受( C)\n探测图未识别 HTTP 200 回复中的错误"
+      },
+      "1.0.0": {
+        "en": "initial release based on website data",
+        "de": "erste Veröffentlichung basierend auf Website-Daten",
+        "ru": "первоначальное освобождение",
+        "pt": "libertação inicial",
+        "nl": "eerste release",
+        "fr": "libération initiale",
+        "it": "rilascio iniziale",
+        "es": "liberación inicial",
+        "pl": "początkowe zwolnienie",
+        "uk": "початковий реліз",
+        "zh-cn": "初步释放"
+      },
+      "0.0.1": {
+        "en": "initial release",
+        "de": "Erstveröffentlichung",
+        "ru": "Начальная версия",
+        "pt": "lançamento inicial",
+        "nl": "Eerste uitgave",
+        "fr": "Première version",
+        "it": "Versione iniziale",
+        "es": "Versión inicial",
+        "pl": "Pierwsze wydanie",
+        "uk": "Початкова версія",
+        "zh-cn": "首次出版"
+      }
     },
-    "native": {
-        "email": "",
-        "password": "",
-        "interval": 300
+    "titleLang": {
+      "en": "Polestar",
+      "de": "Polestar",
+      "ru": "Полярная звезда",
+      "pt": "Estrela Polar",
+      "nl": "Poolster",
+      "fr": "Étoile polaire",
+      "it": "Stella polare",
+      "es": "estrella polar",
+      "pl": "Gwiazda Polarna",
+      "uk": "Полярна зірка",
+      "zh-cn": "北极星"
     },
-    "encryptedNative": ["password"],
-    "protectedNative": ["password"],
-    "objects": [],
-    "instanceObjects": [
-        {
-            "_id": "info",
-            "type": "channel",
-            "common": {
-                "name": "Information"
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.connection",
-            "type": "state",
-            "common": {
-                "role": "indicator.connected",
-                "name": "Device or service connected",
-                "type": "boolean",
-                "read": true,
-                "write": false,
-                "def": false
-            },
-            "native": {}
-        }
+    "desc": {
+      "en": "ioBroker Adapter for Polestar",
+      "de": "ioBroker-Adapter für Polestar",
+      "ru": "Адаптер ioBroker для Polestar",
+      "pt": "Adaptador ioBroker para Polestar",
+      "nl": "ioBroker-adapter voor Polestar",
+      "fr": "Adaptateur ioBroker pour Polestar",
+      "it": "Adattatore ioBroker per Polestar",
+      "es": "Adaptador ioBroker para Polestar",
+      "pl": "Adapter ioBroker dla Polestar",
+      "uk": "Адаптер ioBroker для Polestar",
+      "zh-cn": "Polestar 的 ioBroker 适配器"
+    },
+    "authors": [
+      "TA2k <tombox2020@gmail.com>"
+    ],
+    "keywords": [
+      "iobroker",
+      "polestar"
+    ],
+    "licenseInformation": {
+      "type": "free",
+      "license": "MIT"
+    },
+    "platform": "Javascript/Node.js",
+    "icon": "polestar.png",
+    "enabled": true,
+    "extIcon": "https://raw.githubusercontent.com/TA2k/ioBroker.polestar/main/admin/polestar.png",
+    "readme": "https://github.com/TA2k/ioBroker.polestar/blob/main/README.md",
+    "loglevel": "info",
+    "tier": 3,
+    "mode": "daemon",
+    "type": "vehicle",
+    "compact": true,
+    "connectionType": "cloud",
+    "dataSource": "poll",
+    "adminUI": {
+      "config": "json"
+    },
+    "dependencies": [
+      {
+        "js-controller": ">=6.0.11"
+      }
+    ],
+    "globalDependencies": [
+      {
+        "admin": ">=7.6.17"
+      }
     ]
+  },
+  "native": {
+    "email": "",
+    "password": "",
+    "interval": 300
+  },
+  "encryptedNative": [
+    "password"
+  ],
+  "protectedNative": [
+    "password"
+  ],
+  "objects": [],
+  "instanceObjects": [
+    {
+      "_id": "info",
+      "type": "channel",
+      "common": {
+        "name": "Information"
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.connection",
+      "type": "state",
+      "common": {
+        "role": "indicator.connected",
+        "name": "Device or service connected",
+        "type": "boolean",
+        "read": true,
+        "write": false,
+        "def": false
+      },
+      "native": {}
+    }
+  ]
 }

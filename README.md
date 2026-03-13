@@ -198,6 +198,13 @@ Use the following trigger in Blockly:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### 1.0.1 (2026-03-13)
+
+* (TA2k) Adapt to Polestar API changes - remove unavailable fields (fixes #13)
+* (TA2k) Split vehicle fetch into minimal + full request for robustness
+* (TA2k) Add Terms & Conditions auto-acceptance in login flow
+* (TA2k) Detect GraphQL UNAUTHENTICATED errors in HTTP 200 responses
+
 ### 1.0.0 (2026-02-12)
 * (TA2k) initial release based on website data
 
