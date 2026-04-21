@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "polestar",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "news": {
       "1.0.1": {
         "en": "Adapt to Polestar API changes - remove unavailable fields\nSplit vehicle fetch into minimal + full request for robustness\nAdd Terms & Conditions auto-acceptance in login flow\nDetect GraphQL UNAUTHENTICATED errors in HTTP 200 responses",
