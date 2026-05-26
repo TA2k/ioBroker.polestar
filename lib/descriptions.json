@@ -1,6 +1,6 @@
 {
     "batteryChargeLevelPercentage": "Battery Charge Level (%)",
-    "chargingStatus": "Charging Status",
+    "chargingStatusV2": "Charging Status",
     "estimatedChargingTimeToFullMinutes": "Estimated Charging Time to Full (min)",
     "estimatedDistanceToEmptyKm": "Estimated Range (km)",
     "estimatedDistanceToEmptyMiles": "Estimated Range (miles)",
@@ -44,5 +44,9 @@
     "odometerKm": "Odometer (km)",
     "estimatedFullChargeRangeKm": "Estimated Range at 100% (km)",
     "estimatedFullyChargedTime": "Estimated Full Charge Time",
+    "batteryChargeTargetLevel": "Charge Target Level (%) (gRPC)",
+    "chargeTargetLevelSettingType": "Charge Target Setting Type (gRPC)",
+    "pendingBatteryChargeTargetLevel": "Pending Charge Target Level (%) (gRPC)",
+    "pendingChargeTargetLevelSettingType": "Pending Charge Target Setting Type (gRPC)",
     "lastUpdate": "Last Update"
 }

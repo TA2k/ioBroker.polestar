@@ -18,6 +18,7 @@ ioBroker Adapter for Polestar vehicles.
 
 - Vehicle information (model, VIN, battery capacity, etc.)
 - Battery status (charge level, charging status, estimated range)
+- Charge limit / target SoC (via gRPC)
 - Odometer data
 - Health status (service warnings, days to service)
 - Automatic token refresh
@@ -35,11 +36,18 @@ ioBroker Adapter for Polestar vehicles.
 
 ### Battery
 - `batteryChargeLevelPercentage` - Current charge level (%)
-- `chargingStatus` - Charging status (Idle, Charging, Done, etc.)
+- `chargingStatusV2` - Charging status (Idle, Charging, Done, etc.)
 - `estimatedDistanceToEmptyKm` - Estimated range (km)
 - `estimatedFullChargeRangeKm` - Calculated range at 100% (km)
 - `estimatedChargingTimeToFullMinutes` - Time to full charge (min)
 - `estimatedFullyChargedTime` - Estimated full charge timestamp
+
+### Target SoC (gRPC)
+
+- `batteryChargeTargetLevel` - Configured charge limit (%)
+- `chargeTargetLevelSettingType` - Setting type (`DAILY`, `LONG_TRIP`, `CUSTOM`)
+- `pendingBatteryChargeTargetLevel` - Pending charge limit during change
+- `pendingChargeTargetLevelSettingType` - Pending setting type
 
 ### Odometer
 - `odometerMeters` - Odometer (m)
@@ -62,8 +70,9 @@ All states are located under `polestar.0.<VIN>.*`. Example paths:
 
 ```text
 polestar.0.YSMVSEGEXPL110548.battery.batteryChargeLevelPercentage
-polestar.0.YSMVSEGEXPL110548.battery.chargingStatus
+polestar.0.YSMVSEGEXPL110548.battery.chargingStatusV2
 polestar.0.YSMVSEGEXPL110548.battery.estimatedDistanceToEmptyKm
+polestar.0.YSMVSEGEXPL110548.targetSoc.batteryChargeTargetLevel
 polestar.0.YSMVSEGEXPL110548.odometer.odometerKm
 polestar.0.YSMVSEGEXPL110548.health.daysToService
 polestar.0.YSMVSEGEXPL110548.remote.refresh
@@ -71,17 +80,25 @@ polestar.0.YSMVSEGEXPL110548.remote.refresh
 
 ## State Values
 
-### chargingStatus
+### chargingStatusV2
 
 | Value | Description |
 |-------|-------------|
-| `CHARGING_STATUS_IDLE` | Not charging |
-| `CHARGING_STATUS_CHARGING` | Currently charging |
-| `CHARGING_STATUS_DONE` | Charging complete |
-| `CHARGING_STATUS_SCHEDULED` | Scheduled charging |
-| `CHARGING_STATUS_SMART_CHARGING` | Smart charging active |
-| `CHARGING_STATUS_FAULT` | Charging fault |
-| `CHARGING_STATUS_ERROR` | Charging error |
+| `CHARGING_STATUS_V2_IDLE` | Not charging |
+| `CHARGING_STATUS_V2_CHARGING` | Currently charging |
+| `CHARGING_STATUS_V2_DONE` | Charging complete |
+| `CHARGING_STATUS_V2_SCHEDULED` | Scheduled charging |
+| `CHARGING_STATUS_V2_SMART_CHARGING` | Smart charging active |
+| `CHARGING_STATUS_V2_FAULT` | Charging fault |
+| `CHARGING_STATUS_V2_ERROR` | Charging error |
+
+### chargeTargetLevelSettingType
+
+| Value | Description |
+|-------|-------------|
+| `DAILY` | Daily charge target |
+| `LONG_TRIP` | Long trip charge target |
+| `CUSTOM` | Custom charge target |
 
 ### serviceWarning
 
@@ -119,12 +136,12 @@ on({ id: 'polestar.0.*.battery.batteryChargeLevelPercentage', change: 'ne' }, fu
 ### JavaScript: Log Charging Status Changes
 
 ```javascript
-on({ id: 'polestar.0.*.battery.chargingStatus', change: 'ne' }, function (obj) {
+on({ id: 'polestar.0.*.battery.chargingStatusV2', change: 'ne' }, function (obj) {
     const statusMap = {
-        'CHARGING_STATUS_IDLE': 'Nicht laden',
-        'CHARGING_STATUS_CHARGING': 'Laden',
-        'CHARGING_STATUS_DONE': 'Vollgeladen',
-        'CHARGING_STATUS_SCHEDULED': 'Geplant'
+        'CHARGING_STATUS_V2_IDLE': 'Nicht laden',
+        'CHARGING_STATUS_V2_CHARGING': 'Laden',
+        'CHARGING_STATUS_V2_DONE': 'Vollgeladen',
+        'CHARGING_STATUS_V2_SCHEDULED': 'Geplant'
     };
     log(`Polestar Ladestatus: ${statusMap[obj.state.val] || obj.state.val}`);
 });
@@ -149,9 +166,9 @@ schedule('0 0 * * *', function () {
 ### JavaScript: Charging Complete Notification with Time
 
 ```javascript
-on({ id: 'polestar.0.*.battery.chargingStatus', val: 'CHARGING_STATUS_DONE' }, function (obj) {
-    const battery = getState(obj.id.replace('chargingStatus', 'batteryChargeLevelPercentage')).val;
-    const range = getState(obj.id.replace('chargingStatus', 'estimatedDistanceToEmptyKm')).val;
+on({ id: 'polestar.0.*.battery.chargingStatusV2', val: 'CHARGING_STATUS_V2_DONE' }, function (obj) {
+    const battery = getState(obj.id.replace('chargingStatusV2', 'batteryChargeLevelPercentage')).val;
+    const range = getState(obj.id.replace('chargingStatusV2', 'estimatedDistanceToEmptyKm')).val;
 
     sendTo('pushover.0', {
         message: `Polestar vollgeladen!\nAkku: ${battery}%\nReichweite: ${range} km`,
@@ -198,6 +215,12 @@ Use the following trigger in Blockly:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+
+* (TA2k) Fix deprecated `chargingStatus` field - renamed to `chargingStatusV2` (enum values use `_V2_` prefix)
+* (TA2k) Add charge limit / target SoC via gRPC under `<VIN>.targetSoc.*` (api.pccs-prod.plstr.io)
+* (TA2k) New runtime dependencies: `@grpc/grpc-js`, `@grpc/proto-loader`
+
 ### 1.0.1 (2026-03-13)
 
 * (TA2k) Adapt to Polestar API changes - remove unavailable fields (fixes #13)

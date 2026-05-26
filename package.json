@@ -21,8 +21,10 @@
     "node": ">= 20"
   },
   "dependencies": {
+    "@grpc/grpc-js": "^1.12.6",
+    "@grpc/proto-loader": "^0.7.13",
     "@iobroker/adapter-core": "^3.3.2",
-    "axios": "^1.13.6",
+    "axios": "^1.15.2",
     "axios-cookiejar-support": "^5.0.5",
     "json2iob": "^2.6.22",
     "tough-cookie": "^5.1.2"
@@ -36,8 +38,8 @@
     "@iobroker/eslint-config": "^2.2.0",
     "@iobroker/testing": "^5.2.2",
     "@tsconfig/node20": "^20.1.9",
-    "@types/iobroker": "npm:@iobroker/types@^7.1.0",
-    "@types/node": "^20.19.37",
+    "@types/iobroker": "npm:@iobroker/types@^7.1.1",
+    "@types/node": "^20.19.39",
     "typescript": "~5.9.3"
   },
   "main": "main.js",

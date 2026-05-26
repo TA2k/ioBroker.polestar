@@ -8,6 +8,7 @@ const crypto = require('crypto');
 const Json2iob = require('json2iob');
 const descriptions = require('./lib/descriptions.json');
 const states = require('./lib/states.json');
+const GrpcClient = require('./lib/grpcClient');
 
 class Polestar extends utils.Adapter {
     constructor(options) {
@@ -25,6 +26,8 @@ class Polestar extends utils.Adapter {
         this.vehicles = [];
         this.updateInterval = null;
         this.refreshTokenInterval = null;
+        this.grpcClient = null;
+        this.grpcAvailable = false;
 
         const jar = new CookieJar();
         this.requestClient = wrapper(
@@ -62,6 +65,16 @@ class Polestar extends utils.Adapter {
         }
 
         await this.getVehicles();
+
+        try {
+            this.grpcClient = new GrpcClient(this.log);
+            await this.grpcClient.connect();
+            this.grpcAvailable = true;
+            this.log.debug('gRPC client ready (TargetSoc)');
+        } catch (e) {
+            this.log.warn(`gRPC init failed (non-fatal, charge limit unavailable): ${e.message}`);
+        }
+
         await this.updateVehicleData();
 
         this.updateInterval = setInterval(async () => {
@@ -352,7 +365,7 @@ class Polestar extends utils.Adapter {
       vin
       timestamp { seconds nanos }
       batteryChargeLevelPercentage
-      chargingStatus
+      chargingStatusV2
       estimatedChargingTimeToFullMinutes
       estimatedDistanceToEmptyKm
       estimatedDistanceToEmptyMiles
@@ -434,6 +447,37 @@ class Polestar extends utils.Adapter {
             }
             this.log.error(`Update vehicle data error: ${error.message}`);
         }
+
+        if (this.grpcAvailable) {
+            await this.updateGrpcData();
+        }
+    }
+
+    async updateGrpcData() {
+        if (!this.grpcClient || !this.session) {
+            return;
+        }
+        for (const vehicle of this.vehicles) {
+            try {
+                const resp = await this.grpcClient.getTargetSoc(vehicle.vin, this.session.access_token);
+                if (!resp) {
+                    continue;
+                }
+                const out = {
+                    batteryChargeTargetLevel: resp.target_soc?.battery_charge_target_level ?? null,
+                    chargeTargetLevelSettingType: resp.target_soc?.charge_target_level_setting_type ?? null,
+                    pendingBatteryChargeTargetLevel: resp.pending_target_soc?.battery_charge_target_level ?? null,
+                    pendingChargeTargetLevelSettingType:
+                        resp.pending_target_soc?.charge_target_level_setting_type ?? null,
+                };
+                if (resp.updated_at) {
+                    out.lastUpdate = new Date(Number(resp.updated_at)).toISOString();
+                }
+                this.json2iob.parse(`${vehicle.vin}.targetSoc`, out, { forceIndex: true, descriptions, states });
+            } catch (e) {
+                this.log.debug(`gRPC getTargetSoc failed for ${vehicle.vin}: ${e.message}`);
+            }
+        }
     }
 
     generateRandomString(length = 43) {
@@ -462,6 +506,7 @@ class Polestar extends utils.Adapter {
             this.setState('info.connection', false, true);
             this.updateInterval && clearInterval(this.updateInterval);
             this.refreshTokenInterval && clearInterval(this.refreshTokenInterval);
+            this.grpcClient?.close();
             callback();
         } catch {
             callback();
