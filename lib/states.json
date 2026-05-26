@@ -1,14 +1,14 @@
 {
-    "chargingStatusV2": {
-        "CHARGING_STATUS_V2_DONE": "Done",
-        "CHARGING_STATUS_V2_IDLE": "Idle",
-        "CHARGING_STATUS_V2_CHARGING": "Charging",
-        "CHARGING_STATUS_V2_FAULT": "Fault",
-        "CHARGING_STATUS_V2_UNSPECIFIED": "Unspecified",
-        "CHARGING_STATUS_V2_SCHEDULED": "Scheduled",
-        "CHARGING_STATUS_V2_DISCHARGING": "Discharging",
-        "CHARGING_STATUS_V2_ERROR": "Error",
-        "CHARGING_STATUS_V2_SMART_CHARGING": "Smart Charging"
+    "chargingStatus": {
+        "CHARGING_STATUS_DONE": "Done",
+        "CHARGING_STATUS_IDLE": "Idle",
+        "CHARGING_STATUS_CHARGING": "Charging",
+        "CHARGING_STATUS_FAULT": "Fault",
+        "CHARGING_STATUS_UNSPECIFIED": "Unspecified",
+        "CHARGING_STATUS_SCHEDULED": "Scheduled",
+        "CHARGING_STATUS_DISCHARGING": "Discharging",
+        "CHARGING_STATUS_ERROR": "Error",
+        "CHARGING_STATUS_SMART_CHARGING": "Smart Charging"
     },
     "chargeTargetLevelSettingType": {
         "CHARGE_TARGET_LEVEL_SETTING_TYPE_UNSPECIFIED": "Unspecified",

@@ -1,6 +1,6 @@
 {
     "batteryChargeLevelPercentage": "Battery Charge Level (%)",
-    "chargingStatusV2": "Charging Status",
+    "chargingStatus": "Charging Status",
     "estimatedChargingTimeToFullMinutes": "Estimated Charging Time to Full (min)",
     "estimatedDistanceToEmptyKm": "Estimated Range (km)",
     "estimatedDistanceToEmptyMiles": "Estimated Range (miles)",

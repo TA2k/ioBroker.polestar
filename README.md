@@ -1,4 +1,5 @@
 ![Logo](admin/polestar.png)
+
 # ioBroker.polestar
 
 [![NPM version](https://img.shields.io/npm/v/iobroker.polestar.svg)](https://www.npmjs.com/package/iobroker.polestar)
@@ -26,17 +27,18 @@ ioBroker Adapter for Polestar vehicles.
 
 ## Configuration
 
-| Setting | Description |
-|---------|-------------|
-| Email | Polestar account email |
-| Password | Polestar account password |
+| Setting  | Description                             |
+| -------- | --------------------------------------- |
+| Email    | Polestar account email                  |
+| Password | Polestar account password               |
 | Interval | Update interval in seconds (minimum 60) |
 
 ## States
 
 ### Battery
+
 - `batteryChargeLevelPercentage` - Current charge level (%)
-- `chargingStatusV2` - Charging status (Idle, Charging, Done, etc.)
+- `chargingStatus` - Charging status (Idle, Charging, Done, etc.)
 - `estimatedDistanceToEmptyKm` - Estimated range (km)
 - `estimatedFullChargeRangeKm` - Calculated range at 100% (km)
 - `estimatedChargingTimeToFullMinutes` - Time to full charge (min)
@@ -50,10 +52,12 @@ ioBroker Adapter for Polestar vehicles.
 - `pendingChargeTargetLevelSettingType` - Pending setting type
 
 ### Odometer
+
 - `odometerMeters` - Odometer (m)
 - `odometerKm` - Odometer (km)
 
 ### Health
+
 - `daysToService` - Days until next service
 - `distanceToServiceKm` - Distance until next service (km)
 - `serviceWarning` - Service warning status
@@ -62,6 +66,7 @@ ioBroker Adapter for Polestar vehicles.
 - `oilLevelWarning` - Oil level warning
 
 ### Remote
+
 - `refresh` - Trigger manual data refresh
 
 ## State Paths
@@ -70,7 +75,7 @@ All states are located under `polestar.0.<VIN>.*`. Example paths:
 
 ```text
 polestar.0.YSMVSEGEXPL110548.battery.batteryChargeLevelPercentage
-polestar.0.YSMVSEGEXPL110548.battery.chargingStatusV2
+polestar.0.YSMVSEGEXPL110548.battery.chargingStatus
 polestar.0.YSMVSEGEXPL110548.battery.estimatedDistanceToEmptyKm
 polestar.0.YSMVSEGEXPL110548.targetSoc.batteryChargeTargetLevel
 polestar.0.YSMVSEGEXPL110548.odometer.odometerKm
@@ -80,43 +85,43 @@ polestar.0.YSMVSEGEXPL110548.remote.refresh
 
 ## State Values
 
-### chargingStatusV2
+### chargingStatus
 
-| Value | Description |
-|-------|-------------|
-| `CHARGING_STATUS_V2_IDLE` | Not charging |
-| `CHARGING_STATUS_V2_CHARGING` | Currently charging |
-| `CHARGING_STATUS_V2_DONE` | Charging complete |
-| `CHARGING_STATUS_V2_SCHEDULED` | Scheduled charging |
-| `CHARGING_STATUS_V2_SMART_CHARGING` | Smart charging active |
-| `CHARGING_STATUS_V2_FAULT` | Charging fault |
-| `CHARGING_STATUS_V2_ERROR` | Charging error |
+| Value                            | Description           |
+| -------------------------------- | --------------------- |
+| `CHARGING_STATUS_IDLE`           | Not charging          |
+| `CHARGING_STATUS_CHARGING`       | Currently charging    |
+| `CHARGING_STATUS_DONE`           | Charging complete     |
+| `CHARGING_STATUS_SCHEDULED`      | Scheduled charging    |
+| `CHARGING_STATUS_SMART_CHARGING` | Smart charging active |
+| `CHARGING_STATUS_FAULT`          | Charging fault        |
+| `CHARGING_STATUS_ERROR`          | Charging error        |
 
 ### chargeTargetLevelSettingType
 
-| Value | Description |
-|-------|-------------|
-| `DAILY` | Daily charge target |
+| Value       | Description             |
+| ----------- | ----------------------- |
+| `DAILY`     | Daily charge target     |
 | `LONG_TRIP` | Long trip charge target |
-| `CUSTOM` | Custom charge target |
+| `CUSTOM`    | Custom charge target    |
 
 ### serviceWarning
 
-| Value | Description |
-|-------|-------------|
-| `SERVICE_WARNING_NO_WARNING` | No service needed |
-| `SERVICE_WARNING_SERVICE_REQUIRED` | Service required |
-| `SERVICE_WARNING_REGULAR_MAINTENANCE_ALMOST_TIME_FOR_SERVICE` | Service soon |
-| `SERVICE_WARNING_REGULAR_MAINTENANCE_TIME_FOR_SERVICE` | Time for service |
-| `SERVICE_WARNING_REGULAR_MAINTENANCE_OVERDUE_FOR_SERVICE` | Service overdue |
+| Value                                                         | Description       |
+| ------------------------------------------------------------- | ----------------- |
+| `SERVICE_WARNING_NO_WARNING`                                  | No service needed |
+| `SERVICE_WARNING_SERVICE_REQUIRED`                            | Service required  |
+| `SERVICE_WARNING_REGULAR_MAINTENANCE_ALMOST_TIME_FOR_SERVICE` | Service soon      |
+| `SERVICE_WARNING_REGULAR_MAINTENANCE_TIME_FOR_SERVICE`        | Time for service  |
+| `SERVICE_WARNING_REGULAR_MAINTENANCE_OVERDUE_FOR_SERVICE`     | Service overdue   |
 
 ### Warning States (brakeFluidLevelWarning, engineCoolantLevelWarning, oilLevelWarning)
 
-| Value | Description |
-|-------|-------------|
-| `*_NO_WARNING` | No warning |
-| `*_TOO_LOW` | Level too low |
-| `*_TOO_HIGH` | Level too high (oil only) |
+| Value          | Description               |
+| -------------- | ------------------------- |
+| `*_NO_WARNING` | No warning                |
+| `*_TOO_LOW`    | Level too low             |
+| `*_TOO_HIGH`   | Level too high (oil only) |
 
 ## Scripting Examples
 
@@ -127,7 +132,7 @@ polestar.0.YSMVSEGEXPL110548.remote.refresh
 on({ id: 'polestar.0.*.battery.batteryChargeLevelPercentage', change: 'ne' }, function (obj) {
     if (obj.state.val < 20) {
         sendTo('telegram.0', {
-            text: `Polestar Akku niedrig: ${obj.state.val}%`
+            text: `Polestar Akku niedrig: ${obj.state.val}%`,
         });
     }
 });
@@ -136,12 +141,12 @@ on({ id: 'polestar.0.*.battery.batteryChargeLevelPercentage', change: 'ne' }, fu
 ### JavaScript: Log Charging Status Changes
 
 ```javascript
-on({ id: 'polestar.0.*.battery.chargingStatusV2', change: 'ne' }, function (obj) {
+on({ id: 'polestar.0.*.battery.chargingStatus', change: 'ne' }, function (obj) {
     const statusMap = {
-        'CHARGING_STATUS_V2_IDLE': 'Nicht laden',
-        'CHARGING_STATUS_V2_CHARGING': 'Laden',
-        'CHARGING_STATUS_V2_DONE': 'Vollgeladen',
-        'CHARGING_STATUS_V2_SCHEDULED': 'Geplant'
+        CHARGING_STATUS_IDLE: 'Nicht laden',
+        CHARGING_STATUS_CHARGING: 'Laden',
+        CHARGING_STATUS_DONE: 'Vollgeladen',
+        CHARGING_STATUS_SCHEDULED: 'Geplant',
     };
     log(`Polestar Ladestatus: ${statusMap[obj.state.val] || obj.state.val}`);
 });
@@ -166,13 +171,13 @@ schedule('0 0 * * *', function () {
 ### JavaScript: Charging Complete Notification with Time
 
 ```javascript
-on({ id: 'polestar.0.*.battery.chargingStatusV2', val: 'CHARGING_STATUS_V2_DONE' }, function (obj) {
-    const battery = getState(obj.id.replace('chargingStatusV2', 'batteryChargeLevelPercentage')).val;
-    const range = getState(obj.id.replace('chargingStatusV2', 'estimatedDistanceToEmptyKm')).val;
+on({ id: 'polestar.0.*.battery.chargingStatus', val: 'CHARGING_STATUS_DONE' }, function (obj) {
+    const battery = getState(obj.id.replace('chargingStatus', 'batteryChargeLevelPercentage')).val;
+    const range = getState(obj.id.replace('chargingStatus', 'estimatedDistanceToEmptyKm')).val;
 
     sendTo('pushover.0', {
         message: `Polestar vollgeladen!\nAkku: ${battery}%\nReichweite: ${range} km`,
-        title: 'Ladevorgang beendet'
+        title: 'Ladevorgang beendet',
     });
 });
 ```
@@ -189,7 +194,7 @@ schedule('0 8 * * *', function () {
         sendTo('email.0', {
             to: 'user@example.com',
             subject: 'Polestar Service bald faellig',
-            text: `Service in ${daysToService} Tagen oder ${kmToService} km`
+            text: `Service in ${daysToService} Tagen oder ${kmToService} km`,
         });
     }
 });
@@ -211,27 +216,30 @@ Use the following trigger in Blockly:
 ```
 
 ## Changelog
+
 <!--
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
 ### **WORK IN PROGRESS**
 
-* (TA2k) Fix deprecated `chargingStatus` field - renamed to `chargingStatusV2` (enum values use `_V2_` prefix)
-* (TA2k) Add charge limit / target SoC via gRPC under `<VIN>.targetSoc.*` (api.pccs-prod.plstr.io)
-* (TA2k) New runtime dependencies: `@grpc/grpc-js`, `@grpc/proto-loader`
+- (TA2k) Adapt to Polestar API rename of `chargingStatus` → `chargingStatusV2` (state name and enum values kept stable for existing user scripts)
+- (TA2k) Add charge limit / target SoC via gRPC under `<VIN>.targetSoc.*`
 
 ### 1.0.1 (2026-03-13)
 
-* (TA2k) Adapt to Polestar API changes - remove unavailable fields (fixes #13)
-* (TA2k) Split vehicle fetch into minimal + full request for robustness
-* (TA2k) Add Terms & Conditions auto-acceptance in login flow
-* (TA2k) Detect GraphQL UNAUTHENTICATED errors in HTTP 200 responses
+- (TA2k) Adapt to Polestar API changes - remove unavailable fields (fixes #13)
+- (TA2k) Split vehicle fetch into minimal + full request for robustness
+- (TA2k) Add Terms & Conditions auto-acceptance in login flow
+- (TA2k) Detect GraphQL UNAUTHENTICATED errors in HTTP 200 responses
 
 ### 1.0.0 (2026-02-12)
-* (TA2k) initial release based on website data
+
+- (TA2k) initial release based on website data
 
 ## License
+
 MIT License
 
 Copyright (c) 2026 TA2k <tombox2020@gmail.com>

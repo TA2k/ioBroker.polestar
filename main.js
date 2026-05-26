@@ -401,6 +401,16 @@ class Polestar extends utils.Adapter {
             const data = response.data.data?.carTelematicsV2;
             if (data) {
                 for (const battery of data.battery || []) {
+                    // Map new V2 field/enum back to legacy state name to keep user scripts working.
+                    // Polestar renamed `chargingStatus` -> `chargingStatusV2` and prefixed the
+                    // enum values (e.g. CHARGING_STATUS_CHARGING -> CHARGING_STATUS_V2_CHARGING).
+                    if (battery.chargingStatusV2 !== undefined) {
+                        battery.chargingStatus =
+                            typeof battery.chargingStatusV2 === 'string'
+                                ? battery.chargingStatusV2.replace('_V2_', '_')
+                                : battery.chargingStatusV2;
+                        delete battery.chargingStatusV2;
+                    }
                     // Add calculated fields
                     if (battery.batteryChargeLevelPercentage > 0 && battery.estimatedDistanceToEmptyKm > 0) {
                         battery.estimatedFullChargeRangeKm = Math.round(
