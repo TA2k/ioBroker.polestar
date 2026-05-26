@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "polestar",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "news": {
+      "1.0.3": {
+        "en": "Adapt to Polestar API rename of `chargingStatus` → `chargingStatusV2` (state name and enum values kept stable for existing user scripts)\nAdd charge limit / target SoC via gRPC under `<VIN>.targetSoc.*`",
+        "de": "Anpassung an die Polestar API-Umbenennung von `chargingStatus` → `chargingStatusV2` (Name und Enum-Werte bleiben stabil für bestehende Benutzerskripte)\nLadelimit / Ziel SoC über gRPC unter `<VIN>.targetSoc.* `",
+        "ru": "Адаптация к Polestar API, переименованному в «chargingStatus» → «chargingStatusV2» (имя состояния и числовые значения сохраняют стабильность для существующих пользовательских скриптов)\nДобавить предел заряда / целевой SoC через gRPC в разделе <VIN>.targetSoc.*",
+        "pt": "Adaptar à API Polestar renomear `carregandoStatus` → `carregandoStatusV2` (nome do estado e valores de enum mantidos estáveis para scripts de usuários existentes)\nAdicionar limite de carga / destino SoC via gRPC em `<VIN>.targetSoc.*`",
+        "nl": "Aanpassen aan Polestar API-hernoeming van . . . . . . . . . . . . . . \nVoeg laadlimiet/doel SoC toe via gRPC onder ",
+        "fr": "Adapter au nom de l'API Polestar de `chargingStatus` → `chargingStatusV2` (nom d'état et valeurs enum maintenus stables pour les scripts utilisateurs existants)\nAjouter la limite de charge / cible SoC via gRPC sous `<VIN>.targetSoc.*`",
+        "it": "Adapt to Polestar API rinomina di `chargingStatus` → `chargingStatusV2` (nome di stato e valori di enum mantenuti stabili per gli script utente esistenti)\nAggiungi il limite di carica / target SoC tramite gRPC sotto ` ̧VIN>.targetSoc.*`",
+        "es": "Adaptarse a Polestar API renombrado de `chargingStatus` → `chargingStatusV2` (nombre de estado y valores de enum mantenido estable para scripts de usuario existentes)\nAñada límite de carga / objetivo SoC vía gRPC bajo `Herramienta",
+        "pl": "Dostosowanie do nazwy API Polestar 'chargingStatus' → 'chargingStatusV2' (nazwa stanu i wartości enum utrzymywane na stabilnym poziomie dla istniejących skryptów użytkownika)\nDodaj limit / target SoC przez gRPC pod '< VIN > .targeSoc. *'",
+        "uk": "Адаптація в Полістар API перейменування `chargingStatus` → `chargingStatusV2` (державне ім’я та значення Enum зберігаються стійкі для існуючих сценаріїв користувачів)\nДодати ліміт заряду / цільовий SoC через gRPC під `<VIN>.targetSoc.*`",
+        "zh-cn": "适应 Polestar API 重命名 ' 充电状态 ' —— ' 充电状态V2 ' (为现有用户脚本保持状态名称和enum值稳定)\n在 QQVIN >.goalSoc. 下通过 gRPC 添加电荷限制/目标SoC"
+      },
       "1.0.1": {
         "en": "Adapt to Polestar API changes - remove unavailable fields\nSplit vehicle fetch into minimal + full request for robustness\nAdd Terms & Conditions auto-acceptance in login flow\nDetect GraphQL UNAUTHENTICATED errors in HTTP 200 responses",
         "de": "Anpassung an Polestar API-Änderungen - Entfernen Sie nicht verfügbare Felder\nSplit Fahrzeug-Fetch in minimal + volle Anforderung an Robustheit\nAutoakzeptanz in Login-Flow hinzufügen\nErkennen Sie GraphQL UNAUTHENTICATED Fehler in HTTP 200 Antworten",

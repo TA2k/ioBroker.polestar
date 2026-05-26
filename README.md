@@ -221,8 +221,7 @@ Use the following trigger in Blockly:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 1.0.3 (2026-05-26)
 
 - (TA2k) Adapt to Polestar API rename of `chargingStatus` → `chargingStatusV2` (state name and enum values kept stable for existing user scripts)
 - (TA2k) Add charge limit / target SoC via gRPC under `<VIN>.targetSoc.*`
